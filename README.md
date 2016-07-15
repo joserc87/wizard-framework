@@ -1,9 +1,11 @@
 
-# wizard-daemon
+# wizard-framework
 
-A daemon written in python that keeps your file system and the document wizard
-server in sync. It is just a dirty tool that makes the development and testing
-of wizards a bit easier.
+A set of scripts to help the developer of wizard configurations.
+
+Contains a daemon written in python that keeps your file system and the
+document wizard server in sync. It is just a dirty tool that makes the
+development and testing of wizards a bit easier.
 
 # Why?
 
@@ -31,3 +33,30 @@ need of doing steps 2, 3 and 4 so you can focus on writing and testing.
 **WARNING:** Keep in mind that, when the wizard configuration or the event
 template files are uploaded to the server, any previous content will be
 overwritten and can't be recovered.
+
+# Install
+
+Download the project
+
+Install pip requirements. (use of virtualenv is recommended)
+
+```
+$ pip install -r ./requirements.txt
+``
+
+Change the URL of the server in the scripts
+
+# Use
+
+Run the daemon
+
+```
+$ python wizard-daemon.py
+```
+
+Login with your active directory credentials. A `wizard/` directory will be
+created and populated with all the wizard configurations. Change the
+configurations. When you press save, the configurations will be automatically
+uploaded.
+
+
