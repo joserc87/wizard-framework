@@ -40,9 +40,9 @@ Download the project
 
 Install pip requirements. (use of virtualenv is recommended)
 
-```
+```sh
 $ pip install -r ./requirements.txt
-``
+```
 
 Change the URL of the server in the scripts
 
@@ -50,7 +50,7 @@ Change the URL of the server in the scripts
 
 Run the daemon
 
-```
+```sh
 $ python wizard-daemon.py
 ```
 
