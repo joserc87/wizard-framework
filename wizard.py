@@ -80,7 +80,7 @@ class Broker:
   def login(self, user, password):
     self.auth = (user, password)
     # Dummy call to see if we are authenticated
-    r = self.get('/work')
+    r = self.get('/users/current')
     if r.status_code == 200:
       return 'OK'
     elif r.status_code == 401:
