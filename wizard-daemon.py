@@ -100,8 +100,31 @@ def login(broker):
     print(authenticated)
 
 if __name__ == "__main__":
-  broker = Broker('http://WIN-DEVSRVR2012/')
-  fs = FileSystem()
+  endpoints = {
+      'docwiz': {
+          'url': 'https://www.docwiz.nl/',
+          'base': 'api/'
+      },
+      'vm': {
+          'url': 'http://WIN-DEVSRVR2012/',
+          'base': 'api/v2.0/'
+      },
+      'localhost': {
+          'url': 'http://localhost/',
+          'base': 'api/v2.0/'
+      },
+      'area51': {
+          'url': 'http://area51/',
+          'base': 'api/dev/'
+      }
+  }
+  # Select the endpoint to connect to
+  endpoint = ''
+  while endpoint not in endpoints.keys():
+      endpoint = raw_input('endpoint [{}]: '.format('/'.join(endpoints.keys()))).lower()
+
+  broker = Broker(endpoints[endpoint]['url'], endpoints[endpoint]['base'])
+  fs = FileSystem('./data/' + endpoint + '/wizards/')
 
   # Login
   login(broker)
