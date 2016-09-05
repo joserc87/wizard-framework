@@ -93,8 +93,8 @@ def login(broker):
   # Login
   authenticated = ''
   while authenticated != 'OK':
-    user = raw_input('User:')
-    pwd = getpass.getpass('Password:')
+    user = raw_input('User: ')
+    pwd = getpass.getpass('Password: ')
     print('Authenticating...')
     authenticated = broker.login(user, pwd)
     print(authenticated)
