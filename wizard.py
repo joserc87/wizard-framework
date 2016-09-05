@@ -52,7 +52,7 @@ class Wizard:
 
 class Broker:
 
-  def __init__(self, host='http://localhost/', base='TCFDocumentWizardMobileWebService/TCFDocumentWizardAPI.svc'):
+  def __init__(self, host='http://localhost/', base='api/v2.0'):
     self.host = host
     self.base = base
     self.DEBUG = False
