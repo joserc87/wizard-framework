@@ -124,7 +124,8 @@ if __name__ == "__main__":
       endpoint = raw_input('endpoint [{}]: '.format('/'.join(endpoints.keys()))).lower()
 
   broker = Broker(endpoints[endpoint]['url'], endpoints[endpoint]['base'])
-  fs = FileSystem('./data/' + endpoint + '/wizards/')
+  root = './data/' + endpoint + '/'
+  fs = FileSystem(root + 'wizards/')
 
   # Login
   login(broker)
@@ -138,7 +139,7 @@ if __name__ == "__main__":
   event_handler = MyHandler(broker, fs, debug=False)
 
   observer = Observer()
-  observer.schedule(event_handler, path='.', recursive=True)
+  observer.schedule(event_handler, path=root, recursive=True)
   observer.start()
 
   print 'READY'
