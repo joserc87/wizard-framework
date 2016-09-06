@@ -38,7 +38,7 @@ class Wizard:
       Validates a wizard configuration and returns possible errors in a list of strings
       Returns an empty list if the validation passes
       """
-      r = self.broker.post('/wizards/configuration/validate', content)
+      r = self.broker.post('/wizards/configuration/validation', content)
       if r.status_code == 200:
         return r.json()
       else:
