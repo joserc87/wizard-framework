@@ -4,6 +4,28 @@ from wizard import Broker, FileSystem
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+class bcolors:
+  # Colors from http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
+  HEADER = '\033[35m'
+  OKBLUE = '\033[34m'
+  OKGREEN = '\033[32m'
+  WARNING = '\033[33m'
+  FAIL = '\033[31m'
+  ENDC = '\033[0m'
+  BOLD = '\033[1m'
+  UNDERLINE = '\033[4m'
+
+def log(msg):
+  print bcolors.OKGREEN + msg + bcolors.ENDC
+
+def info(msg):
+  print bcolors.OKBLUE + msg + bcolors.ENDC
+
+def warn(msg):
+  print bcolors.WARNING + msg + bcolors.ENDC
+
+def err(msg):
+  print bcolors.FAIL + msg + bcolors.ENDC
 
 class MyHandler(FileSystemEventHandler):
   """
@@ -25,7 +47,7 @@ class MyHandler(FileSystemEventHandler):
 
   def log(self, msg):
     if self.debug:
-      print msg
+      print bcolors.OKGREEN + msg + bcolors.ENDC
 
   # File System events
 
@@ -74,19 +96,26 @@ class MyHandler(FileSystemEventHandler):
     wizard = broker.get_wizard(wizardID)
     # Check that wizard still exists
     if wizard is not None:
-      wizard.set_configuration(self.filesystem.read(path))
-      print "Uploading configuration xml for wizard {0}".format(wizard.name)
+      data = self.filesystem.read(path)
+      errors = wizard.validate_configuration(data)
+      if len(errors) == 0:
+        info("Uploading configuration xml for wizard {0}".format(wizard.name))
+        wizard.set_configuration(data)
+      else:
+        message = "Validation failed in configuration of wizard {0}:\n  - ".format(wizard.name) +\
+            '\n  - '.join(errors)
+        warn(message)
     else:
-      print 'The wizard with ID {0} does not exist anymore!'.format(wizardID)
+      err('The wizard with ID {0} does not exist anymore!'.format(wizardID))
 
   def update_event_template(self, wizardID, path):
     wizard = broker.get_wizard(wizardID)
     # Check that wizard still exists
     if wizard is not None:
       wizard.set_event_template(self.filesystem.read(path))
-      print "Uploading event template xml for wizard {0}".format(wizard.name)
+      info("Uploading event template xml for wizard {0}".format(wizard.name))
     else:
-      print 'The wizard with ID {0} does not exist anymore!'.format(wizardID)
+      err('The wizard with ID {0} does not exist anymore!'.format(wizardID))
 
 def login(broker):
   import getpass
@@ -95,9 +124,12 @@ def login(broker):
   while authenticated != 'OK':
     user = raw_input('User: ')
     pwd = getpass.getpass('Password: ')
-    print('Authenticating...')
+    log('Authenticating...')
     authenticated = broker.login(user, pwd)
-    print(authenticated)
+    if authenticated == 'OK':
+      log(authenticated)
+    else:
+      err(authenticated)
 
 if __name__ == "__main__":
   endpoints = {
@@ -131,9 +163,9 @@ if __name__ == "__main__":
   login(broker)
 
   # One time synchronization between the filesystem and the server
-  print 'SYNCHRONIZING...'
+  log('SYNCHRONIZING...')
   fs.update_wizard_folders(broker.get_wizards())
-  print 'DONE'
+  log('DONE')
 
   # Start the daemon
   event_handler = MyHandler(broker, fs, debug=False)
@@ -142,8 +174,8 @@ if __name__ == "__main__":
   observer.schedule(event_handler, path=root, recursive=True)
   observer.start()
 
-  print 'READY'
-  print 'WATCHING FS'
+  log('READY')
+  log('WATCHING FS')
 
   try:
     while True:

@@ -33,6 +33,17 @@ class Wizard:
     else:
       return True
 
+  def validate_configuration(self, content):
+      """
+      Validates a wizard configuration and returns possible errors in a list of strings
+      Returns an empty list if the validation passes
+      """
+      r = self.broker.post('/wizards/configuration/validate', content)
+      if r.status_code == 200:
+        return r.json()
+      else:
+        return ['validation returned code {0}'.format(r.status_code)]
+
   def get_event_template(self):
     if self.event_template is None: 
       r = self.broker.get('/wizards/{0}/event'.format(self.id))
@@ -69,6 +80,11 @@ class Broker:
     url = self.getURL(part)
     self.debug(' -- GET :: {0}'.format(url))
     return requests.get(url, auth=self.auth)
+
+  def post(self, part, content):
+    url = self.getURL(part)
+    self.debug(' -- POST :: {0}'.format(url))
+    return requests.post(url, data=content, auth=self.auth)
 
   def put(self, part, content):
     url = self.getURL(part)
