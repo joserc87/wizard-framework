@@ -4,6 +4,9 @@ from wizard import Broker, FileSystem
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+try: input = raw_input
+except NameError: pass
+
 class bcolors:
   # Colors from http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
   HEADER = '\033[35m'
@@ -16,16 +19,16 @@ class bcolors:
   UNDERLINE = '\033[4m'
 
 def log(msg):
-  print bcolors.OKGREEN + msg + bcolors.ENDC
+  print(bcolors.OKGREEN + msg + bcolors.ENDC)
 
 def info(msg):
-  print bcolors.OKBLUE + msg + bcolors.ENDC
+  print(bcolors.OKBLUE + msg + bcolors.ENDC)
 
 def warn(msg):
-  print bcolors.WARNING + msg + bcolors.ENDC
+  print(bcolors.WARNING + msg + bcolors.ENDC)
 
 def err(msg):
-  print bcolors.FAIL + msg + bcolors.ENDC
+  print(bcolors.FAIL + msg + bcolors.ENDC)
 
 class MyHandler(FileSystemEventHandler):
   """
@@ -47,7 +50,7 @@ class MyHandler(FileSystemEventHandler):
 
   def log(self, msg):
     if self.debug:
-      print bcolors.OKGREEN + msg + bcolors.ENDC
+      print(bcolors.OKGREEN + msg + bcolors.ENDC)
 
   # File System events
 
@@ -122,7 +125,7 @@ def login(broker):
   # Login
   authenticated = ''
   while authenticated != 'OK':
-    user = raw_input('User: ')
+    user = input('User: ')
     pwd = getpass.getpass('Password: ')
     log('Authenticating...')
     authenticated = broker.login(user, pwd)
@@ -153,7 +156,7 @@ if __name__ == "__main__":
   # Select the endpoint to connect to
   endpoint = ''
   while endpoint not in endpoints.keys():
-      endpoint = raw_input('endpoint [{}]: '.format('/'.join(endpoints.keys()))).lower()
+      endpoint = input('endpoint [{}]: '.format('/'.join(endpoints.keys()))).lower()
 
   broker = Broker(endpoints[endpoint]['url'], endpoints[endpoint]['base'])
   root = './data/' + endpoint + '/'

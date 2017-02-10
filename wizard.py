@@ -17,7 +17,7 @@ class Wizard:
     return "Wizard[{0}]: '{1}' ({2})".format(self.id, self.name, 'active' if self.is_active else 'inactive')
 
   def get_configuration(self):
-    if self.configuration is None: 
+    if self.configuration is None:
       r = self.broker.get('/wizards/{0}/configuration'.format(self.id))
       self.configuration = r.content
     return self.configuration
@@ -45,7 +45,7 @@ class Wizard:
         return ['validation returned code {0}'.format(r.status_code)]
 
   def get_event_template(self):
-    if self.event_template is None: 
+    if self.event_template is None:
       r = self.broker.get('/wizards/{0}/event'.format(self.id))
       self.event_template = r.content
     return self.event_template
@@ -67,7 +67,7 @@ class Broker:
     self.host = host
     self.base = base
     self.DEBUG = False
-  
+
   def debug(self, msg):
     if (self.DEBUG):
       print(msg)
@@ -107,7 +107,7 @@ class Broker:
 
   def get_wizards(self):
     # Call the rest web service
-    r = self.get('/wizards') 
+    r = self.get('/wizards')
 
     # Check the output
     if r.status_code == 200:
@@ -122,15 +122,15 @@ class Broker:
 
         return wizards
       else: # Result contains an error
-        print 'There was an error in the call to /wizards:'
-        print result['Error']
+        print('There was an error in the call to /wizards:')
+        print(result['Error'])
     else:
-      print 'Something went wrong'
+      print('Something went wrong' )
     return None
 
   def get_wizard(self, wizardID):
     # Call the rest web service
-    r = self.get('/wizards/{0}'.format(wizardID)) 
+    r = self.get('/wizards/{0}'.format(wizardID))
 
     # Check the output
     if r.status_code == 200:
@@ -146,10 +146,10 @@ class Broker:
 
         return wizard
       else: # Result contains an error
-        print 'There was an error in the call to /wizards/{id}:'
-        print result['Error']
+        print('There was an error in the call to /wizards/{id}:')
+        print(result['Error'])
     else:
-      print 'Something went wrong'
+      print('Something went wrong')
     return None
 
 class FileSystem:
@@ -162,7 +162,7 @@ class FileSystem:
       wizard_dir = '{0}{1} - {2}'.format(self.path,  wizard.id, wizard.name)
       # If the folder does not exist, create it
       if not os.path.isdir(wizard_dir):
-        print "New wizard found: '{0}'".format(wizard.name)
+        print("New wizard found: '{0}'".format(wizard.name))
         os.makedirs(wizard_dir)
       files = [
           (wizard_dir + '/WizardConfiguration.xml', wizard.get_configuration()),
@@ -170,7 +170,7 @@ class FileSystem:
       for (filePath, content) in files:
         # If the files do not exist, create them
         if not os.path.exists(filePath):
-          print "Downloading file '{0}' for wizard '{1}'".format(filePath, wizard.name)
+          print("Downloading file '{0}' for wizard '{1}'".format(filePath, wizard.name))
           self.write(content, filePath)
         else:
           if not self.compare_file_with_data(filePath, content):
@@ -181,9 +181,9 @@ class FileSystem:
               if q.lower() == 'y':
                 self.write(content, filePath)
               elif q.lower() == 'n':
-                print 'Ignoring. File not in sync'
+                print('Ignoring. File not in sync')
               else:
-                print 'Invalid option'
+                print('Invalid option')
 
   def compare_file_with_data(self, path, content):
     # Return false when they are different
