@@ -4,6 +4,7 @@ from wizard import Broker, FileSystem
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+# Python 2 and 3 compatibility
 try: input = raw_input
 except NameError: pass
 

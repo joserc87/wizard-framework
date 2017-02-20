@@ -2,6 +2,10 @@ import os
 import requests
 from requests.auth import HTTPBasicAuth
 
+# Python 2 and 3 compatibility
+try: input = raw_input
+except NameError: pass
+
 class Wizard:
 
   def __init__(self, broker, id, name, description, is_active):
@@ -177,7 +181,7 @@ class FileSystem:
             # Ask the user if he wants to overwrite
             q = ''
             while q != 'y' and q != 'n':
-              q = raw_input('The file {0} has been modified locally. Overrwite? (y/n)'.format(filePath)).lower()
+              q = input('The file {0} has been modified locally. Overrwite? (y/n)'.format(filePath)).lower()
               if q.lower() == 'y':
                 self.write(content, filePath)
               elif q.lower() == 'n':
@@ -209,7 +213,7 @@ if __name__ == "__main__":
   # Login
   authenticated = ''
   while authenticated != 'OK':
-    user = raw_input('User:')
+    user = input('User:')
     pwd = getpass.getpass('Password:')
     print('Authenticating...')
     authenticated = broker.login(user, pwd)
