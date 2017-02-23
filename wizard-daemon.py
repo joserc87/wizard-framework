@@ -152,6 +152,10 @@ if __name__ == "__main__":
       'area51': {
           'url': 'http://area51/',
           'base': 'api/dev/'
+      },
+      'other': {
+          'url': None,
+          'base': 'api/dev/'
       }
   }
   # Select the endpoint to connect to
@@ -159,7 +163,18 @@ if __name__ == "__main__":
   while endpoint not in endpoints.keys():
       endpoint = input('endpoint [{}]: '.format('/'.join(endpoints.keys()))).lower()
 
-  broker = Broker(endpoints[endpoint]['url'], endpoints[endpoint]['base'])
+  url, base = endpoints[endpoint]['url'], endpoints[endpoint]['base']
+
+  # Custom endpoint: fill in by the user
+  if endpoint == 'other':
+      while url is None:
+          url = input('server url (e.g. http://myserver.com/): ')
+      base = input("base api [default 'api/']: ") or base
+
+  # Add last slash
+  url = (url + '/') if url[-1] != '/' else url
+
+  broker = Broker(url, base)
   root = './data/' + endpoint + '/'
   fs = FileSystem(root + 'wizards/')
 
