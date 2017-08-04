@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import time
 from wizard import Broker, FileSystem
+from endpoints import endpoints
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -136,28 +137,6 @@ def login(broker):
       err(authenticated)
 
 if __name__ == "__main__":
-  endpoints = {
-      'docwiz': {
-          'url': 'https://www.docwiz.nl/',
-          'base': 'api/'
-      },
-      'vm': {
-          'url': 'http://WIN-DEVSRVR2012/',
-          'base': 'api/v2.0/'
-      },
-      'localhost': {
-          'url': 'http://localhost/',
-          'base': 'api/v2.0/'
-      },
-      'area51': {
-          'url': 'http://area51/',
-          'base': 'api/dev/'
-      },
-      'other': {
-          'url': None,
-          'base': 'api/dev/'
-      }
-  }
   # Select the endpoint to connect to
   endpoint = ''
   while endpoint not in endpoints.keys():
