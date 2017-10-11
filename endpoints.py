@@ -12,6 +12,10 @@ endpoints = {
         'url': 'http://WIN-DEVSRVR2016/',
         'base': 'api/v2.0/'
     },
+    'oldvm': {
+        'url': 'http://WIN-DEVSRVR2012/',
+        'base': 'api/v2.0/'
+    },
     'localhost': {
         'url': 'http://localhost/',
         'base': 'api/v2.0/'

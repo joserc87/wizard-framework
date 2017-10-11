@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import time
+import os
 from wizard import Broker, FileSystem
 from endpoints import endpoints
 from watchdog.observers import Observer
@@ -172,6 +173,10 @@ if __name__ == "__main__":
 
     broker = Broker(url, base)
     root = './data/' + endpoint + '/'
+    # Crete the directory if it does not exist
+    if not os.path.exists(root):
+        os.makedirs(root)
+
     fs = FileSystem(root + 'wizards/')
 
     # Login
